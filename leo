@@ -64,6 +64,14 @@ local CONFIG = {
             rarity = { "Rarity", "Raridade", "RarityName", "RarityTier" },
         },
     },
+    Treadmill = {
+        ScanSeconds = 4,
+        CycleSeconds = 0.30,
+        ActionTimeout = 2.7,
+        RetryingSeconds = 2.5,
+        VerifyPetSeconds = 2.0,
+        MaxPetAttempts = 2,
+    },
     Base = {
         RefreshSeconds = 2,
         ReturnHeight = 3.5,
@@ -77,45 +85,91 @@ local CONFIG = {
     },
 }
 
+-- LEO HUB • NEON EDITION: paleta da referência azul-marinho / ciano.
 local THEME = {
-    Background = Color3.fromRGB(12, 19, 30),
-    Rail = Color3.fromRGB(17, 28, 40),
-    Surface = Color3.fromRGB(22, 34, 47),
-    Input = Color3.fromRGB(30, 45, 60),
-    Border = Color3.fromRGB(52, 72, 88),
-    Text = Color3.fromRGB(255, 255, 255),
-    Muted = Color3.fromRGB(255, 255, 255),
-    Accent = Color3.fromRGB(66, 218, 191),
-    Success = Color3.fromRGB(101, 227, 174),
-    Warning = Color3.fromRGB(255, 194, 116),
-    Hover = Color3.fromRGB(62, 84, 102),
-    Highlight = Color3.fromRGB(98, 245, 213),
+    Background = Color3.fromRGB(3, 12, 26),
+    Rail = Color3.fromRGB(5, 20, 42),
+    Surface = Color3.fromRGB(8, 28, 54),
+    Input = Color3.fromRGB(12, 34, 63),
+    Border = Color3.fromRGB(30, 91, 153),
+    Text = Color3.fromRGB(242, 249, 255),
+    Muted = Color3.fromRGB(166, 196, 224),
+    Accent = Color3.fromRGB(16, 112, 255),
+    Success = Color3.fromRGB(48, 236, 160),
+    Warning = Color3.fromRGB(255, 191, 94),
+    Hover = Color3.fromRGB(26, 71, 121),
+    Highlight = Color3.fromRGB(64, 198, 255),
+    -- Cores exclusivas dos botoes: ligeiramente menos brilhantes que o tema.
+    ButtonAccent = Color3.fromRGB(13, 93, 218),
+    ButtonWarning = Color3.fromRGB(205, 151, 73),
 }
 
-local FLOATING_LOGO_BLUE_BORDER = Color3.fromRGB(36, 115, 255)
-
+-- Paletas completas: todas as áreas e efeitos acompanham o tema escolhido.
 local THEME_PRESETS = {
     roxo = {
+        Background = Color3.fromRGB(16, 10, 31),
+        Rail = Color3.fromRGB(26, 16, 46),
+        Surface = Color3.fromRGB(38, 24, 62),
+        Input = Color3.fromRGB(53, 35, 77),
+        Border = Color3.fromRGB(112, 77, 155),
+        Text = Color3.fromRGB(250, 244, 255),
+        Muted = Color3.fromRGB(194, 170, 218),
         Accent = Color3.fromRGB(168, 85, 247),
-        Highlight = Color3.fromRGB(208, 162, 255),
-        Warning = Color3.fromRGB(255, 194, 116),
+        Highlight = Color3.fromRGB(212, 165, 255),
+        Success = Color3.fromRGB(69, 222, 158),
+        Warning = Color3.fromRGB(245, 183, 96),
+        Hover = Color3.fromRGB(76, 49, 113),
+        OnAccent = Color3.fromRGB(255, 250, 255),
     },
     vermelho = {
-        Accent = Color3.fromRGB(255, 92, 92),
-        Highlight = Color3.fromRGB(255, 160, 160),
-        Warning = Color3.fromRGB(255, 203, 124),
+        Background = Color3.fromRGB(29, 10, 16),
+        Rail = Color3.fromRGB(44, 16, 25),
+        Surface = Color3.fromRGB(59, 24, 35),
+        Input = Color3.fromRGB(78, 33, 47),
+        Border = Color3.fromRGB(157, 70, 86),
+        Text = Color3.fromRGB(255, 245, 247),
+        Muted = Color3.fromRGB(222, 170, 180),
+        Accent = Color3.fromRGB(244, 82, 101),
+        Highlight = Color3.fromRGB(255, 159, 167),
+        Success = Color3.fromRGB(72, 226, 160),
+        Warning = Color3.fromRGB(250, 187, 99),
+        Hover = Color3.fromRGB(117, 48, 66),
+        OnAccent = Color3.fromRGB(255, 250, 250),
     },
     amarelo = {
-        Accent = Color3.fromRGB(255, 211, 78),
-        Highlight = Color3.fromRGB(255, 236, 156),
-        Warning = Color3.fromRGB(255, 186, 92),
+        Background = Color3.fromRGB(27, 23, 12),
+        Rail = Color3.fromRGB(39, 33, 18),
+        Surface = Color3.fromRGB(56, 46, 24),
+        Input = Color3.fromRGB(78, 62, 32),
+        Border = Color3.fromRGB(155, 125, 60),
+        Text = Color3.fromRGB(255, 250, 232),
+        Muted = Color3.fromRGB(215, 194, 149),
+        Accent = Color3.fromRGB(250, 207, 78),
+        Highlight = Color3.fromRGB(255, 231, 152),
+        Success = Color3.fromRGB(114, 229, 163),
+        Warning = Color3.fromRGB(255, 180, 86),
+        Hover = Color3.fromRGB(111, 86, 40),
+        OnAccent = Color3.fromRGB(32, 25, 13),
     },
     azul = {
-        Accent = Color3.fromRGB(36, 115, 255),
-        Highlight = Color3.fromRGB(111, 181, 255),
-        Warning = Color3.fromRGB(255, 194, 116),
+        Background = Color3.fromRGB(3, 12, 26),
+        Rail = Color3.fromRGB(5, 20, 42),
+        Surface = Color3.fromRGB(8, 28, 54),
+        Input = Color3.fromRGB(12, 34, 63),
+        Border = Color3.fromRGB(30, 91, 153),
+        Text = Color3.fromRGB(242, 249, 255),
+        Muted = Color3.fromRGB(166, 196, 224),
+        Accent = Color3.fromRGB(16, 112, 255),
+        Highlight = Color3.fromRGB(64, 198, 255),
+        Success = Color3.fromRGB(48, 236, 160),
+        Warning = Color3.fromRGB(255, 191, 94),
+        Hover = Color3.fromRGB(26, 71, 121),
+        OnAccent = Color3.fromRGB(250, 253, 255),
     },
 }
+
+THEME.OnAccent = THEME_PRESETS.azul.OnAccent
+THEME.DarkText = Color3.fromRGB(34, 27, 18)
 
 local Settings = {
     theme = "azul",
@@ -188,22 +242,29 @@ local function round(instance, radius)
 end
 
 local function outline(instance)
-    local stroke = create("UIStroke", { Color = THEME.Border, Transparency = 0.45 }, instance)
+    local stroke = create("UIStroke", {
+        Color = THEME.Border, Thickness = 1.05, Transparency = 0.34,
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+    }, instance)
     stroke:SetAttribute("StyledOutline", true)
     return stroke
 end
 
 local function label(parent, text, size, position, dimensions, color)
     local role = "text"
-    if color == THEME.Muted then role = "muted" elseif color == THEME.Accent then role = "accent" end
+    if color == THEME.Muted then role = "muted"
+    elseif color == THEME.Accent then role = "accent"
+    elseif color == THEME.Success then role = "success"
+    elseif color == THEME.Warning then role = "warning"
+    elseif color == THEME.Highlight then role = "highlight" end
     return markText(create("TextLabel", {
         BackgroundTransparency = 1,
         Text = text,
-        TextColor3 = Color3.new(1, 1, 1),
+        TextColor3 = color or THEME.Text,
         TextStrokeColor3 = Color3.fromRGB(0, 0, 0),
-        TextStrokeTransparency = 0.75,
-        TextSize = math.max(10, size + 2),
-        Font = Enum.Font.FredokaOne,
+        TextStrokeTransparency = 1,
+        TextSize = math.max(10, size),
+        Font = size >= 14 and Enum.Font.GothamBold or Enum.Font.GothamMedium,
         TextXAlignment = Enum.TextXAlignment.Left,
         TextTruncate = Enum.TextTruncate.AtEnd,
         Position = position,
@@ -223,32 +284,37 @@ end
 
 local function button(parent, text, position, dimensions, accent)
     local item = create("TextButton", {
-        BackgroundColor3 = accent and THEME.Accent or THEME.Input,
+        BackgroundColor3 = accent and THEME.ButtonAccent or THEME.Input,
         BorderSizePixel = 0,
         Text = text,
-        TextColor3 = Color3.new(1, 1, 1),
-        TextStrokeColor3 = Color3.fromRGB(0, 0, 0),
-        TextStrokeTransparency = 0.75,
-        TextSize = 14,
-        Font = Enum.Font.FredokaOne,
+        TextColor3 = accent and THEME.OnAccent or THEME.Text,
+        TextStrokeTransparency = 1,
+        TextSize = 13,
+        Font = Enum.Font.GothamBold,
         Position = position,
         Size = dimensions,
         AutoButtonColor = false,
-        BackgroundTransparency = 0.05,
+        BackgroundTransparency = 0,
     }, parent)
     item:SetAttribute("StyledButton", true)
-    item:SetAttribute("ButtonAccent", accent and true or false)
-    round(item, 12)
+    item:SetAttribute("ButtonAccent", accent == true)
+    round(item, 11)
     local stroke = create("UIStroke", {
         Color = accent and THEME.Highlight or THEME.Border,
-        Thickness = 1.1, Transparency = accent and 0.50 or 0.58,
+        Thickness = accent and 1.45 or 1.0,
+        Transparency = accent and 0.23 or 0.35,
         ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
     }, item)
     stroke:SetAttribute("ButtonStroke", true)
-    create("UIGradient", {
+    local gradient = create("UIGradient", {
         Rotation = 90,
-        Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(207, 222, 234)),
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+            ColorSequenceKeypoint.new(0.47, Color3.fromRGB(244, 244, 244)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(215, 215, 215)),
+        }),
     }, item)
+    gradient:SetAttribute("LeoButtonGradient", true)
     local scale = create("UIScale", { Scale = 1 }, item)
     item.MouseEnter:Connect(function()
         if not state.running then return end
@@ -257,13 +323,13 @@ local function button(parent, text, position, dimensions, accent)
     end)
     item.MouseLeave:Connect(function()
         tween(scale, QUICK, { Scale = 1 })
-        tween(stroke, QUICK, { Transparency = 0.58 })
+        tween(stroke, QUICK, { Transparency = item:GetAttribute("ButtonAccent") and 0.23 or 0.35 })
     end)
     item.MouseButton1Down:Connect(function()
-        tween(scale, QUICK, { Scale = 0.975 })
+        tween(scale, QUICK, { Scale = 0.97 })
     end)
     item.MouseButton1Up:Connect(function()
-        tween(scale, QUICK, { Scale = 1.025 })
+        tween(scale, QUICK, { Scale = 1.02 })
     end)
     return item
 end
@@ -580,10 +646,12 @@ connect(player.CharacterAdded, function()
 end)
 
 local playerGui = player:WaitForChild("PlayerGui")
-local oldGui = playerGui:FindFirstChild("LeoHub") or playerGui:FindFirstChild("ExuFinder")
-if oldGui then oldGui:Destroy() end
-local oldFloating = playerGui:FindFirstChild("LeoHubFloating")
-if oldFloating then oldFloating:Destroy() end
+do
+    local oldGui = playerGui:FindFirstChild("LeoHub") or playerGui:FindFirstChild("ExuFinder")
+    if oldGui then oldGui:Destroy() end
+    local oldFloating = playerGui:FindFirstChild("LeoHubFloating")
+    if oldFloating then oldFloating:Destroy() end
+end
 
 local gui = create("ScreenGui", {
     Name = "LeoHub", ResetOnSpawn = false,
@@ -592,43 +660,92 @@ local gui = create("ScreenGui", {
 local main = markSurface(create("Frame", {
     Name = "Panel", AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(CONFIG.Width, CONFIG.Height),
-    BackgroundColor3 = THEME.Background, BackgroundTransparency = 0.07, BorderSizePixel = 0,
+    BackgroundColor3 = THEME.Background, BackgroundTransparency = 0, BorderSizePixel = 0,
     ClipsDescendants = true, Active = true,
 }, gui), "background")
-round(main, 18)
-outline(main)
-local mainAccentBorder = create("UIStroke", {
-    Color = THEME.Accent, Thickness = 1.8, Transparency = 0.18,
-    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-}, main)
-mainAccentBorder:SetAttribute("MainAccentBorder", true)
+round(main, 19)
+-- Iluminação neutra preserva a tonalidade real dos quatro temas.
 create("UIGradient", {
-    Rotation = 25,
+    Rotation = 112,
     Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, THEME.Highlight),
-        ColorSequenceKeypoint.new(0.5, THEME.Accent),
-        ColorSequenceKeypoint.new(1, THEME.Highlight),
-    })
-}, mainAccentBorder)
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+        ColorSequenceKeypoint.new(0.45, Color3.fromRGB(229, 229, 229)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(194, 194, 194)),
+    }),
+}, main):SetAttribute("LeoMainGradient", true)
+do
+    local mainAccentBorder = create("UIStroke", {
+        Color = THEME.Highlight, Thickness = 1.8, Transparency = 0.02,
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+    }, main)
+    mainAccentBorder:SetAttribute("MainAccentBorder", true)
+    create("UIGradient", {
+        Rotation = 25,
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, THEME.Highlight),
+            ColorSequenceKeypoint.new(0.5, THEME.Accent),
+            ColorSequenceKeypoint.new(1, THEME.Highlight),
+        })
+    }, mainAccentBorder):SetAttribute("LeoAccentBorderGradient", true)
+end
 local uiScale = create("UIScale", { Scale = 1 }, main)
 
 local function surface(parent, name, position, dimensions, color)
     local role = (color or THEME.Surface) == THEME.Rail and "rail" or "surface"
     local frame = markSurface(create("Frame", {
         Name = name, Position = position, Size = dimensions,
-        BackgroundColor3 = color or THEME.Surface, BackgroundTransparency = 0.08, BorderSizePixel = 0,
+        BackgroundColor3 = color or THEME.Surface,
+        BackgroundTransparency = 0, BorderSizePixel = 0,
     }, parent), role)
     round(frame, 12)
     outline(frame)
+    local gradient = create("UIGradient", {
+        Rotation = 82,
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(242, 242, 242)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(207, 207, 207)),
+        }),
+    }, frame)
+    gradient:SetAttribute("LeoSurfaceGradient", true)
     return frame
 end
 
 local header = create("Frame", {
     Size = UDim2.new(1, 0, 0, 64), BackgroundTransparency = 1, Active = true,
 }, main)
+do
+    local aura = create("Frame", {
+        Name = "HeaderBlueAura", Position = UDim2.new(0, 70, 0, 0),
+        Size = UDim2.new(1, -150, 0, 62), BackgroundColor3 = THEME.Accent,
+        BackgroundTransparency = 0.87, BorderSizePixel = 0,
+        ZIndex = 1,
+    }, header)
+    aura:SetAttribute("ThemeAura", true)
+    create("UIGradient", {Rotation = 0, Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.3), NumberSequenceKeypoint.new(0.55, 0.94),
+        NumberSequenceKeypoint.new(1, 1),
+    })}, aura)
+    local divider = create("Frame", {
+        Name = "LogoDivider", Position = UDim2.fromOffset(91, 13),
+        Size = UDim2.fromOffset(1, 35), BackgroundColor3 = THEME.Highlight,
+        BackgroundTransparency = 0.40, BorderSizePixel = 0,
+    }, header)
+    divider:SetAttribute("LeoAccentDecoration", true)
+    local topLine = create("Frame", {
+        Name = "HeaderHighlight", Position = UDim2.fromOffset(16, 0),
+        Size = UDim2.new(1, -32, 0, 2), BackgroundColor3 = THEME.Highlight,
+        BackgroundTransparency = 0.25, BorderSizePixel = 0,
+    }, header)
+    topLine:SetAttribute("LeoAccentDecoration", true)
+    create("UIGradient", {Rotation = 0, Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.85), NumberSequenceKeypoint.new(0.4, 0.0),
+        NumberSequenceKeypoint.new(1, 0.95),
+    })}, topLine)
+end
 
 local brand = label(header, "LH", 24, UDim2.fromOffset(20, 10), UDim2.fromOffset(50, 43), THEME.Accent)
-brand.Font = Enum.Font.FredokaOne
+brand.Font = Enum.Font.GothamBold
 brand.TextXAlignment = Enum.TextXAlignment.Center
 brand.TextYAlignment = Enum.TextYAlignment.Center
 
@@ -748,20 +865,27 @@ state.embeddedIcons = nil
 state.configureIconSprite = nil
 state.embeddedLogo = nil
 state.decodeEmbeddedLogo = nil
-local title = label(header, CONFIG.Branding.Title, 21, UDim2.fromOffset(87, 10), UDim2.fromOffset(260, 27))
-title.Font = Enum.Font.FredokaOne
-label(header, "SEUS PETS. DO SEU JEITO.", 9, UDim2.fromOffset(88, 39), UDim2.fromOffset(280, 15), THEME.Muted)
-local minimize = button(header, "−", UDim2.new(1, -88, 0, 17), UDim2.fromOffset(30, 30))
-local close = button(header, "×", UDim2.new(1, -48, 0, 17), UDim2.fromOffset(30, 30))
+do
+    local title = label(header, "LEO", 22, UDim2.fromOffset(108, 11), UDim2.fromOffset(70, 27))
+    title.Font = Enum.Font.GothamBlack
+end
+do
+    local hubText = label(header, "HUB", 22, UDim2.fromOffset(164, 11), UDim2.fromOffset(100, 27), THEME.Highlight)
+    hubText.Font = Enum.Font.GothamBlack
+end
+label(header, "S E U S   P E T S .   D O   S E U   J E I T O .", 8, UDim2.fromOffset(109, 39), UDim2.fromOffset(300, 13), THEME.Muted)
+local minimize = button(header, "−", UDim2.new(1, -88, 0, 18), UDim2.fromOffset(29, 29))
+local close = button(header, "×", UDim2.new(1, -46, 0, 18), UDim2.fromOffset(29, 29))
 create("Frame", { Position = UDim2.new(0, 16, 1, -1), Size = UDim2.new(1, -32, 0, 1),
-    BackgroundColor3 = THEME.Border, BackgroundTransparency = 0.4, BorderSizePixel = 0 }, header)
+    BackgroundColor3 = THEME.Border, BackgroundTransparency = 0.4, BorderSizePixel = 0 }, header):SetAttribute("ThemeBorder", true)
 
 local body = create("Frame", { BackgroundTransparency = 1,
     Position = UDim2.fromOffset(0, 64), Size = UDim2.new(1, 0, 1, -64) }, main)
-local rail = surface(body, "Navigation", UDim2.fromOffset(12, 12), UDim2.new(0, 62, 1, -24), THEME.Rail)
-local homeNav = button(rail, "", UDim2.fromOffset(7, 12), UDim2.fromOffset(48, 54), true)
-local settingsNav = button(rail, "", UDim2.fromOffset(7, 78), UDim2.fromOffset(48, 54))
-local aboutNav = button(rail, "", UDim2.fromOffset(7, 144), UDim2.fromOffset(48, 54))
+local rail = surface(body, "Navigation", UDim2.fromOffset(12, 12), UDim2.new(0, 80, 1, -24), THEME.Rail)
+local homeNav = button(rail, "", UDim2.fromOffset(14, 12), UDim2.fromOffset(52, 61), true)
+local settingsNav = button(rail, "", UDim2.fromOffset(14, 83), UDim2.fromOffset(52, 61))
+state.treadmillNav = button(rail, "", UDim2.fromOffset(14, 154), UDim2.fromOffset(52, 61))
+local aboutNav = button(rail, "", UDim2.fromOffset(14, 225), UDim2.fromOffset(52, 61))
 
 state.iconPiece = function(parent, x, y, w, h, rotation, radius, color, transparency)
     local part = create("Frame", {
@@ -809,6 +933,12 @@ state.fallbackIcon = function(holder, index)
         piece(holder, 5, 18, 8, 8, 0, 8)
         piece(holder, 14, 11, 8, 8, 0, 8)
         piece(holder, 23, 20, 8, 8, 0, 8)
+    elseif index == 5 then
+        piece(holder, 5, 25, 28, 3, 0, 2)
+        piece(holder, 9, 19, 19, 3, 0, 2)
+        piece(holder, 15, 8, 4, 11, 0, 2)
+        piece(holder, 21, 11, 4, 8, -25, 2)
+        piece(holder, 7, 5, 7, 4, 0, 3)
     elseif index == 4 then 
         local ring = create("Frame", { Position = UDim2.fromOffset(5, 5),
             Size = UDim2.fromOffset(27, 27), BackgroundTransparency = 1,
@@ -828,32 +958,37 @@ state.attachIcon = function(parent, index, pos, size)
     }, parent)
     state.fallbackIcon(fallback, index)
 end
-state.attachIcon(homeNav, 1, UDim2.fromOffset(7, 3), 34)
-state.attachIcon(settingsNav, 3, UDim2.fromOffset(7, 3), 34)
-state.attachIcon(aboutNav, 4, UDim2.fromOffset(7, 3), 34)
+state.attachIcon(homeNav, 1, UDim2.fromOffset(8, 5), 36)
+state.attachIcon(settingsNav, 3, UDim2.fromOffset(8, 5), 36)
+state.attachIcon(state.treadmillNav, 5, UDim2.fromOffset(8, 5), 36)
+state.attachIcon(aboutNav, 4, UDim2.fromOffset(8, 5), 36)
 for _, entry in ipairs({ { homeNav, "INÍCIO" },
-    { settingsNav, "AJUSTES" }, { aboutNav, "SOBRE" } }) do
-    local caption = label(entry[1], entry[2], 8, UDim2.fromOffset(0, 37), UDim2.new(1, 0, 0, 15))
+    { settingsNav, "AJUSTES" }, { state.treadmillNav, "AUTO" }, { aboutNav, "SOBRE" } }) do
+    local caption = label(entry[1], entry[2], 9, UDim2.fromOffset(0, 41), UDim2.new(1, 0, 0, 15))
     caption.TextXAlignment = Enum.TextXAlignment.Center
 end
-local railMark = label(rail, "LH", 10, UDim2.new(0, 0, 1, -28), UDim2.new(1, 0, 0, 18), THEME.Muted)
-railMark.TextXAlignment = Enum.TextXAlignment.Center
+do
+    local railMark = label(rail, "LH", 10, UDim2.new(0, 0, 1, -28), UDim2.new(1, 0, 0, 18), THEME.Muted)
+    railMark.TextXAlignment = Enum.TextXAlignment.Center
+end
 
 local pages = {}
-for _, name in ipairs({ "home", "settings", "about" }) do
+for _, name in ipairs({ "home", "settings", "auto", "about" }) do
     pages[name] = create("CanvasGroup", { Name = name, BackgroundTransparency = 1, GroupTransparency = 0,
-        Position = UDim2.fromOffset(92, 12), Size = UDim2.new(1, -108, 1, -54),
+        Position = UDim2.fromOffset(104, 12), Size = UDim2.new(1, -120, 1, -29),
         Visible = name == "home" }, body)
 end
 local home = pages.home
-local left = create("Frame", { BackgroundTransparency = 1, Size = UDim2.new(0, 236, 1, 0) }, home)
-local sectionTitle = label(left, "⚡ Coleta automática", 16, UDim2.fromOffset(0, 0), UDim2.new(1, 0, 0, 23))
-sectionTitle.Font = Enum.Font.FredokaOne
-label(left, "Filtre por pet, tamanho ou ambos.", 11, UDim2.fromOffset(0, 27), UDim2.new(1, 0, 0, 18), THEME.Muted)
-local filters = surface(left, "Filters", UDim2.fromOffset(0, 58), UDim2.new(1, 0, 0, 254))
-label(filters, "PETS", 9, UDim2.fromOffset(14, 14), UDim2.new(1, -28, 0, 14), THEME.Muted)
+local left = surface(home, "Overview", UDim2.fromOffset(0, 0), UDim2.new(0, 232, 1, -1), THEME.Rail)
+do
+    local sectionTitle = label(left, "⚡ Coleta automática", 16, UDim2.fromOffset(15, 12), UDim2.new(1, -30, 0, 23))
+    sectionTitle.Font = Enum.Font.GothamBold
+end
+label(left, "Filtre por pet, tamanho ou ambos.", 10, UDim2.fromOffset(15, 37), UDim2.new(1, -25, 0, 18), THEME.Muted)
+local filters = surface(left, "Filters", UDim2.fromOffset(7, 67), UDim2.new(1, -14, 0, 212), THEME.Surface)
+label(filters, "🐾  PETS", 9, UDim2.fromOffset(14, 14), UDim2.new(1, -28, 0, 14), THEME.Muted)
 local petSelect = button(filters, "Selecionar pets (0)", UDim2.fromOffset(14, 34), UDim2.new(1, -28, 0, 34))
-label(filters, "TAMANHOS", 9, UDim2.fromOffset(14, 80), UDim2.new(1, -28, 0, 14), THEME.Muted)
+label(filters, "⬡  TAMANHOS", 9, UDim2.fromOffset(14, 80), UDim2.new(1, -28, 0, 14), THEME.Muted)
 local sizeSelect = button(filters, "Selecionar tamanhos (0)", UDim2.fromOffset(14, 100), UDim2.new(1, -28, 0, 34))
 
 local autoToggle = button(filters, "Ativar coleta automática", UDim2.fromOffset(14, 160), UDim2.new(1, -28, 0, 34), true)
@@ -899,34 +1034,46 @@ autoStatus.Visible = false
 autoStatus.TextWrapped = true
 autoStatus.TextTruncate = Enum.TextTruncate.None
 
-local basePanel = surface(left, "Base", UDim2.fromOffset(0, 326), UDim2.new(1, 0, 0, 108), THEME.Rail)
-label(basePanel, "🏠 SUA BASE", 9, UDim2.fromOffset(14, 12), UDim2.new(1, -28, 0, 16), THEME.Muted)
+local basePanel = surface(left, "Base", UDim2.fromOffset(7, 305), UDim2.new(1, -14, 0, 120), THEME.Surface)
+label(basePanel, "⌂  SUA BASE", 9, UDim2.fromOffset(14, 12), UDim2.new(1, -28, 0, 16), THEME.Muted)
 local baseStatus = label(basePanel, "Procurando no mapa...", 11, UDim2.fromOffset(14, 32), UDim2.new(1, -28, 0, 18))
-local goBack = button(basePanel, "Voltar à base", UDim2.fromOffset(14, 62), UDim2.new(1, -28, 0, 32), true)
+local goBack = button(basePanel, "↶  Voltar à base", UDim2.fromOffset(14, 62), UDim2.new(1, -28, 0, 32), true)
 
 local right = create("Frame", { BackgroundTransparency = 1,
-    Position = UDim2.fromOffset(252, 0), Size = UDim2.new(1, -252, 1, 0) }, home)
+    Position = UDim2.fromOffset(244, 0), Size = UDim2.new(1, -244, 1, 0) }, home)
 local statLabels = {}
 for index, caption in ipairs({ "JOGADORES", "PING", "PETS NA RODADA" }) do
-    local tile = surface(right, "Stat" .. index, UDim2.new((index - 1) / 3, (index - 1) * 4, 0, 0),
-        UDim2.new(1 / 3, -8, 0, 72))
-    label(tile, caption, 9, UDim2.fromOffset(14, 12), UDim2.new(1, -24, 0, 14), THEME.Muted)
-    statLabels[index] = label(tile, "—", 22, UDim2.fromOffset(14, 31), UDim2.new(1, -24, 0, 27), THEME.Text)
-    statLabels[index].Font = Enum.Font.FredokaOne
+    local tile = surface(right, "Stat" .. index,
+        UDim2.new((index - 1) / 3, (index - 1) * 5, 0, 0),
+        UDim2.new(1 / 3, -10, 0, 63), THEME.Surface)
+    local icon = label(tile, ({ "👥", "📶", "🐾" })[index], 25,
+        UDim2.fromOffset(13, 14), UDim2.fromOffset(35, 34), THEME.Highlight)
+    icon.TextXAlignment = Enum.TextXAlignment.Center
+    icon:SetAttribute("LeoStatIcon", index)
+    label(tile, caption, 9, UDim2.fromOffset(59, 12), UDim2.new(1, -65, 0, 14), THEME.Text)
+    statLabels[index] = label(tile, "—", 21, UDim2.fromOffset(59, 27), UDim2.new(1, -68, 0, 29), THEME.Text)
+    statLabels[index].Font = Enum.Font.GothamBlack
 end
-local catalog = surface(right, "Catalog", UDim2.fromOffset(0, 86), UDim2.new(1, 0, 1, -86))
-local catalogTitle = label(catalog, "🐾 Pets spawnados", 15, UDim2.fromOffset(16, 12), UDim2.new(1, -160, 0, 23))
+local catalog = surface(right, "Catalog", UDim2.fromOffset(0, 78), UDim2.new(1, 0, 1, -78), THEME.Surface)
+do
+    local catalogTitle = label(catalog, "🐾 Pets spawnados", 16, UDim2.fromOffset(16, 12), UDim2.new(1, -160, 0, 23))
+    catalogTitle.Font = Enum.Font.GothamBold
+end
 local sort = button(catalog, "Raridade", UDim2.new(1, -144, 0, 10), UDim2.fromOffset(128, 27))
-catalogTitle.Font = Enum.Font.FredokaOne
 local search = create("TextBox", {
     Position = UDim2.fromOffset(16, 44), Size = UDim2.new(1, -32, 0, 36),
-    BackgroundColor3 = THEME.Input, BackgroundTransparency = 0.08, BorderSizePixel = 0, Text = "",
-    PlaceholderText = "Pesquisar nome, raridade ou tamanho...",
-    PlaceholderColor3 = Color3.new(1, 1, 1), TextColor3 = Color3.new(1, 1, 1),
-    TextStrokeTransparency = 0.8, TextSize = 14, Font = Enum.Font.FredokaOne, ClearTextOnFocus = false,
+    BackgroundColor3 = THEME.Input, BackgroundTransparency = 0, BorderSizePixel = 0, Text = "",
+    PlaceholderText = "   ⚲  Pesquisar nome, raridade ou tamanho...",
+    PlaceholderColor3 = THEME.Muted, TextColor3 = THEME.Text,
+    TextStrokeTransparency = 1, TextSize = 12, Font = Enum.Font.Gotham, ClearTextOnFocus = false,
     TextXAlignment = Enum.TextXAlignment.Left,
 }, catalog)
 round(search, 9)
+create("UIStroke", { Color = THEME.Border, Thickness = 1.0, Transparency = 0.22 }, search):SetAttribute("StyledOutline", true)
+create("UIGradient", {
+    Rotation = 0,
+    Color = ColorSequence.new(Color3.fromRGB(255, 255, 255), Color3.fromRGB(214, 214, 214)),
+}, search):SetAttribute("LeoInputGradient", true)
 create("UIPadding", { PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12) }, search)
 local info = label(catalog, "Procurando pets...", 10, UDim2.fromOffset(16, 86), UDim2.new(1, -32, 0, 18), THEME.Muted)
 local scroll = create("ScrollingFrame", {
@@ -945,7 +1092,7 @@ empty.TextXAlignment = Enum.TextXAlignment.Center
 
 local function pageIntro(page, titleText, subtitle)
     local heading = label(page, titleText, 22, UDim2.fromOffset(0, 4), UDim2.new(1, 0, 0, 30))
-    heading.Font = Enum.Font.FredokaOne
+    heading.Font = Enum.Font.GothamBold
     label(page, subtitle, 12, UDim2.fromOffset(0, 42), UDim2.new(1, 0, 0, 24), THEME.Muted)
 end
 pageIntro(pages.settings, "Ajustes do script", "Escolha o tema e ajuste recursos do painel.")
@@ -958,6 +1105,23 @@ create("Frame", { Position = UDim2.fromOffset(20, 88), Size = UDim2.new(1, -40, 
 label(settingsBox, "Anti AFK", 14, UDim2.fromOffset(20, 102), UDim2.new(1, -180, 0, 22))
 local antiAfkToggle = button(settingsBox, "Ativado", UDim2.new(1, -148, 0, 111), UDim2.fromOffset(128, 34), true)
 
+pageIntro(pages.auto, "Auto", "Corrida e coleta funcionando em conjunto.")
+-- Card compacto na metade esquerda; a metade direita fica livre.
+state.treadmillBox = surface(pages.auto, "TreadmillAutomation",
+    UDim2.fromOffset(0, 85), UDim2.new(0.5, -8, 0, 151))
+label(state.treadmillBox, "Auto Treadmill / Correr", 15,
+    UDim2.fromOffset(15, 13), UDim2.new(1, -30, 0, 25))
+do
+    local treadmillDescription = label(state.treadmillBox,
+        "Corre na esteira e pausa quando precisar coletar pets.",
+        10, UDim2.fromOffset(15, 44), UDim2.new(1, -30, 0, 33), THEME.Muted)
+    treadmillDescription.TextWrapped = true
+    treadmillDescription.TextTruncate = Enum.TextTruncate.None
+end
+state.treadmillToggle = button(state.treadmillBox, "Ativar Auto Treadmill / Correr",
+    UDim2.fromOffset(15, 96), UDim2.new(1, -30, 0, 35), true)
+state.treadmillToggle.TextSize = 12
+
 local CREATOR_USERNAME = "armazenatudo"
 pageIntro(pages.about, "Sobre o LEO HUB", "")
 local aboutBox = surface(pages.about, "CreatorProfile", UDim2.fromOffset(0, 54),
@@ -968,18 +1132,20 @@ local aboutPortrait = surface(aboutBox, "CreatorAvatarPanel", UDim2.fromOffset(1
     UDim2.new(0, 282, 1, -24), THEME.Background)
 aboutPortrait.ClipsDescendants = true
 aboutPortrait:SetAttribute("SurfaceRole", "background")
-local portraitAccent = create("UIStroke", {
-    Color = THEME.Accent, Thickness = 1.6, Transparency = 0.36,
-    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-}, aboutPortrait)
-portraitAccent:SetAttribute("MainAccentBorder", true)
-local portraitGlow = create("Frame", {
-    BackgroundColor3 = THEME.Accent, BackgroundTransparency = 0.88,
-    Position = UDim2.new(0.5, -74, 0, -79), Size = UDim2.fromOffset(148, 148),
-    BorderSizePixel = 0, ZIndex = 1,
-}, aboutPortrait)
-round(portraitGlow, 74)
-portraitGlow:SetAttribute("AboutAccentSurface", true)
+do
+    local portraitAccent = create("UIStroke", {
+        Color = THEME.Accent, Thickness = 1.6, Transparency = 0.36,
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+    }, aboutPortrait)
+    portraitAccent:SetAttribute("MainAccentBorder", true)
+    local portraitGlow = create("Frame", {
+        BackgroundColor3 = THEME.Accent, BackgroundTransparency = 0.88,
+        Position = UDim2.new(0.5, -74, 0, -79), Size = UDim2.fromOffset(148, 148),
+        BorderSizePixel = 0, ZIndex = 1,
+    }, aboutPortrait)
+    round(portraitGlow, 74)
+    portraitGlow:SetAttribute("AboutAccentSurface", true)
+end
 
 local avatarThumbnail = create("ImageLabel", {
     Name = "AvatarFallback", BackgroundTransparency = 1,
@@ -1045,13 +1211,13 @@ local discordNick = label(contact, "o.priorizado", 16,
 local avatarRefresh = button(creatorInfo, "Atualizar avatar", UDim2.new(1, -161, 0, 17),
     UDim2.fromOffset(143, 34))
 
-local footer = label(body, "Procurando sua base...", 10, UDim2.new(0, 96, 1, -32), UDim2.new(1, -114, 0, 25), THEME.Muted)
+local footer = label(body, "Procurando sua base...", 9, UDim2.new(0, 104, 1, -15), UDim2.new(1, -120, 0, 12), THEME.Muted)
 footer.TextWrapped = true
 footer.TextTruncate = Enum.TextTruncate.None
 local function notify(message, color)
     if not state.running then return end
     footer.Text = message
-    footer.TextColor3 = Color3.new(1, 1, 1)
+    footer.TextColor3 = color or THEME.Muted
 end
 
 local renderSelectionThumbnail = function(holder, option)
@@ -1078,7 +1244,7 @@ local function addDropdownArrow(item)
     arrow.Name = "DropdownArrow"
     arrow.TextXAlignment = Enum.TextXAlignment.Center
     arrow.TextYAlignment = Enum.TextYAlignment.Center
-    arrow.Font = Enum.Font.FredokaOne
+    arrow.Font = Enum.Font.GothamBold
     arrow.ZIndex = item.ZIndex + 2
     dropdownArrows[item] = arrow
 end
@@ -1142,11 +1308,11 @@ local function openPicker(anchor, options, selected, onSelect)
             UDim2.fromOffset(width - 16, 38), option.value == selected)
         row.ZIndex = 53
         local name = label(row, option.text, 12, UDim2.fromOffset(12, 8),
-            UDim2.new(1, -35, 0, 22), option.value == selected and THEME.Background or THEME.Text)
+            UDim2.new(1, -35, 0, 22), option.value == selected and THEME.OnAccent or THEME.Text)
         name.ZIndex = 54
         if option.value == selected then
             local check = label(row, "✓", 13, UDim2.new(1, -27, 0, 8),
-                UDim2.fromOffset(19, 20), THEME.Background)
+                UDim2.fromOffset(19, 20), THEME.OnAccent)
             check.ZIndex = 54
         end
         row.Activated:Connect(function()
@@ -1162,16 +1328,16 @@ local function openMultiPicker(anchor, titleText, options, selected, onChanged, 
     if not menu then return end
     local heading = label(menu, titleText, 14, UDim2.fromOffset(13, 11),
         UDim2.new(1, -26, 0, 22), THEME.Text)
-    heading.ZIndex, heading.Font = 53, Enum.Font.FredokaOne
+    heading.ZIndex, heading.Font = 53, Enum.Font.GothamBold
     local hint = label(menu, "Marque uma ou mais opções", 10, UDim2.fromOffset(13, 35),
         UDim2.new(1, -26, 0, 16), THEME.Muted)
     hint.ZIndex = 53
     local input = create("TextBox", {
         Position = UDim2.fromOffset(11, 59), Size = UDim2.new(1, -22, 0, 32),
         BackgroundColor3 = THEME.Input, BackgroundTransparency = 0.08, BorderSizePixel = 0,
-        Text = "", PlaceholderText = "Pesquisar...", PlaceholderColor3 = Color3.new(1, 1, 1),
-        TextColor3 = Color3.new(1, 1, 1), TextStrokeTransparency = 0.8,
-        TextSize = 14, Font = Enum.Font.FredokaOne,
+        Text = "", PlaceholderText = "Pesquisar...", PlaceholderColor3 = THEME.Muted,
+        TextColor3 = THEME.Text, TextStrokeTransparency = 0.8,
+        TextSize = 14, Font = Enum.Font.GothamBold,
         ClearTextOnFocus = false, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 53,
     }, menu)
     round(input, 8)
@@ -1192,7 +1358,7 @@ local function openMultiPicker(anchor, titleText, options, selected, onChanged, 
         local filtered = 0
         for _, entry in ipairs(entries) do
             local active = selected[entry.option.value] == true
-            entry.row.BackgroundColor3 = active and Color3.fromRGB(32, 98, 93) or THEME.Input
+            entry.row.BackgroundColor3 = active and THEME.Accent:Lerp(THEME.Rail, 0.72) or THEME.Input
             entry.check.BackgroundColor3 = active and THEME.Accent or THEME.Rail
             entry.checkText.Text = active and "✓" or ""
             entry.checkText.TextColor3 = Color3.new(1, 1, 1)
@@ -1239,12 +1405,14 @@ local function openMultiPicker(anchor, titleText, options, selected, onChanged, 
                 ClipsDescendants = true, ZIndex = 55,
             }, row)
             round(thumb, 7)
+            thumb:SetAttribute("SurfaceRole", "rail")
         end
         local check = create("Frame", {
             Position = UDim2.new(1, -33, 0, 9), Size = UDim2.fromOffset(20, 20),
             BackgroundColor3 = THEME.Rail, BorderSizePixel = 0, ZIndex = 55,
         }, row)
         round(check, 6)
+        check:SetAttribute("SurfaceRole", "rail")
         local checkText = label(check, "", 14, UDim2.new(), UDim2.fromScale(1, 1))
         checkText.ZIndex = 56
         checkText.TextXAlignment = Enum.TextXAlignment.Center
@@ -1521,7 +1689,8 @@ local function clearPreview(card)
     card.previewVersion = card.previewVersion + 1
 
     for _, child in ipairs(card.preview:GetChildren()) do
-        if not child:IsA("UICorner") and not child:IsA("UIStroke") then child:Destroy() end
+        if not child:IsA("UICorner") and not child:IsA("UIStroke")
+            and not child:IsA("UIGradient") then child:Destroy() end
     end
     card.previewReady = false
 end
@@ -1582,7 +1751,6 @@ local function make3DPreview(card, object)
         camera.CFrame = CFrame.lookAt(bounds.Position + Vector3.new(0.8, 0.45, -1).Unit * distance,
             bounds.Position)
         viewport.CurrentCamera = camera
-        card.imageKind.Text = "PRÉVIA 3D"
     end)
     if not ok then
         if viewport then viewport:Destroy() end
@@ -1590,7 +1758,6 @@ local function make3DPreview(card, object)
         local placeholder = label(card.preview, "?", 30, UDim2.new(), UDim2.fromScale(1, 1), THEME.Muted)
         placeholder.TextXAlignment = Enum.TextXAlignment.Center
         placeholder.ZIndex = card.preview.ZIndex + 1
-        card.imageKind.Text = "SEM PRÉVIA"
 
         card.previewError = tostring(failure)
     end
@@ -1758,7 +1925,10 @@ end
 local function cardStatus(card, message, color)
     if card and card.frame.Parent and state.running then
         card.action.Text = message
-        card.action.TextColor3 = Color3.new(1, 1, 1)
+        card.action.TextColor3 = color or THEME.Success
+        if card.actionChip and card.actionChip.Parent then
+            card.actionChip.BackgroundColor3 = color or THEME.Success
+        end
     end
 end
 
@@ -2020,10 +2190,16 @@ for _, name in ipairs(CONFIG.Collection.PetCatalog) do
     Catalog.remember(name, "configurado")
 end
 
+state.treadmill = {
+    enabled = false, switching = false, prompt = nil, wasRunning = false,
+    nextScan = 0, nextRetry = 0, nextReview = 0, token = 0,
+    unconfirmed = 0, holdingPrompt = nil,
+}
 local Auto = {
     enabled = false, version = 0, working = false, active = false,
     pets = {}, sizes = {}, queue = {}, pending = {},
     attempted = setmetatable({}, { __mode = "k" }),
+    attempts = setmetatable({}, { __mode = "k" }),
 }
 function Auto.count(set)
     local count = 0
@@ -2034,8 +2210,9 @@ function Auto.updateUI(message)
     if not state.running then return end
     petSelect.Text = string.format("Selecionar pets (%d)", Auto.count(Auto.pets))
     sizeSelect.Text = string.format("Selecionar tamanhos (%d)", Auto.count(Auto.sizes))
-    autoToggle.Text = Auto.enabled and "Parar coleta automática" or "Ativar coleta automática"
-    autoToggle.BackgroundColor3 = Auto.enabled and THEME.Warning or THEME.Accent
+    autoToggle.Text = Auto.enabled and "■  Parar coleta automática" or "▶  Ativar coleta automática"
+    autoToggle.BackgroundColor3 = Auto.enabled and THEME.ButtonWarning or THEME.ButtonAccent
+    autoToggle.TextColor3 = Auto.enabled and THEME.DarkText or THEME.OnAccent
 
     if state.autoSpinner and state.autoSpinnerRunning ~= Auto.enabled then
         state.autoSpinnerRunning = Auto.enabled
@@ -2089,8 +2266,9 @@ function Auto.pump()
                 if not isAvailable(first) or not Auto.matches(first) then
                     table.remove(Auto.queue, 1)
                     Auto.pending[first] = nil
-                elseif state.busy or not hasBase() or not getRoot() then
-                    Auto.updateUI("Ativa • aguardando base/personagem")
+                elseif state.busy or not hasBase() or not getRoot()
+                    or (state.treadmill.enabled and not state.treadmill.readyForCollection()) then
+                    Auto.updateUI("Aguardando esteira parar / base / personagem")
                     task.wait(0.2)
                 else
                     local object = table.remove(Auto.queue, 1)
@@ -2106,13 +2284,38 @@ function Auto.pump()
                         local outcome = interact(object, state.cards[object], allowed)
                         Auto.active, Auto.inflight = false, nil
                         if Auto.version ~= version and Auto.enabled then Auto.consider(object) end
-                        if Auto.version == version and outcome ~= "cancelled" and outcome ~= "unavailable" then
-                            Auto.attempted[object] = true
-                        end
-                        if outcome == "unavailable" and Auto.version == version
-                            and Auto.enabled and Auto.matches(object) and not Auto.pending[object] then
-                            Auto.pending[object] = true
-                            table.insert(Auto.queue, object)
+                        if Auto.version == version and outcome ~= "cancelled" then
+                            local confirmed = false
+                            if outcome == "sent" and state.treadmill.enabled then
+                                local deadline = os.clock() + CONFIG.Treadmill.VerifyPetSeconds
+                                repeat
+                                    if not Auto.matches(object) or not findPrompt(object) then
+                                        confirmed = true
+                                        break
+                                    end
+                                    task.wait(0.12)
+                                until os.clock() >= deadline or not allowed()
+                            elseif outcome == "sent" then
+                                confirmed = true
+                            end
+                            if Auto.version == version and Auto.enabled then
+                                if confirmed then
+                                    Auto.attempted[object] = true
+                                elseif Auto.matches(object) then
+                                    Auto.attempts[object] = (Auto.attempts[object] or 0) + 1
+                                    if Auto.attempts[object] < CONFIG.Treadmill.MaxPetAttempts
+                                        and not Auto.pending[object] then
+                                        Auto.pending[object] = true
+                                        table.insert(Auto.queue, object)
+                                    else
+                                        Auto.attempted[object] = true
+                                        if state.treadmill.enabled then
+                                            state.treadmill.unconfirmed = state.treadmill.unconfirmed + 1
+                                            state.treadmill.setStatus("Pet sem confirmação; seguindo com os demais")
+                                        end
+                                    end
+                                end
+                            end
                         end
                         if state.running and Auto.enabled then Auto.updateUI() end
                         task.wait(CONFIG.Collection.BetweenPetsSeconds)
@@ -2149,6 +2352,8 @@ function Auto.start()
     refreshBase(true)
     Auto.cancel()
     Auto.attempted = setmetatable({}, { __mode = "k" })
+    Auto.attempts = setmetatable({}, { __mode = "k" })
+    state.treadmill.unconfirmed = 0
     Auto.enabled = true
     Auto.updateUI()
     local startedVersion = Auto.version
@@ -2162,29 +2367,277 @@ function Auto.start()
     end)
 end
 
+do
+local Treadmill = state.treadmill
+-- Controle da esteira: usa o ProximityPrompt que alterna Correr / Parar.
+function Treadmill.action(prompt)
+    if not prompt or not prompt.Parent or not prompt:IsDescendantOf(Workspace)
+        or not prompt.Enabled then return nil end
+    local value = key(prompt.ActionText)
+    if value == "correr" or value == "parar" then return value end
+    return nil
+end
+function Treadmill.isEsteira(prompt)
+    if not prompt or not prompt:IsA("ProximityPrompt") or not Treadmill.action(prompt) then return false end
+    local title = key(prompt.ObjectText)
+    if title:find("esteira", 1, true) or title:find("treadmill", 1, true) then return true end
+    local cursor = prompt.Parent
+    for _ = 1, 4 do
+        if not cursor or cursor == Workspace then break end
+        local name = key(cursor.Name)
+        if name:find("esteira", 1, true) or name:find("treadmill", 1, true) then return true end
+        cursor = cursor.Parent
+    end
+    return false
+end
+function Treadmill.locate(force)
+    if Treadmill.isEsteira(Treadmill.prompt) then return Treadmill.prompt end
+    local now = os.clock()
+    if not force and now < Treadmill.nextScan then return nil end
+    Treadmill.nextScan = now + CONFIG.Treadmill.ScanSeconds
+    local _, root = getRoot()
+    local best, distance = nil, math.huge
+    for _, object in ipairs(Workspace:GetDescendants()) do
+        if object:IsA("ProximityPrompt") and Treadmill.isEsteira(object) then
+            local position = promptPosition(object)
+            if position then
+                local d = root and (root.Position - position).Magnitude or 0
+                if d < distance then best, distance = object, d end
+            end
+        end
+    end
+    Treadmill.prompt = best
+    return best
+end
+function Treadmill.setStatus(message)
+    if not state.running then return end
+    -- O estado continua sendo atualizado no botão, sem texto de status abaixo.
+    if state.treadmillToggle and state.treadmillToggle.Parent then
+        local enabled = Treadmill.enabled
+        state.treadmillToggle.Text = enabled and "Desativar Auto Treadmill / Correr"
+            or "Ativar Auto Treadmill / Correr"
+        state.treadmillToggle.BackgroundColor3 = enabled and THEME.ButtonWarning or THEME.ButtonAccent
+        state.treadmillToggle.TextColor3 = enabled and THEME.DarkText or THEME.OnAccent
+        state.treadmillToggle:SetAttribute("ButtonAccent", not enabled)
+    end
+end
+function Treadmill.needPets()
+    return Auto.enabled and (#Auto.queue > 0 or Auto.active or Auto.inflight ~= nil
+        or Auto.working and #Auto.queue > 0)
+end
+function Treadmill.readyForCollection()
+    if not Treadmill.enabled then return true end
+    if Treadmill.switching then return false end
+    local prompt = Treadmill.locate(false)
+    local action = Treadmill.action(prompt)
+    if action == "correr" then Treadmill.wasRunning = false; return true end
+    if action == "parar" then Treadmill.wasRunning = true; return false end
+    return not Treadmill.wasRunning
+end
+function Treadmill.switch(desiredRunning)
+    if Treadmill.switching or state.busy or not state.running or not Treadmill.enabled then return false end
+    local prompt = Treadmill.locate(false)
+    if not prompt then Treadmill.setStatus("Esteira não localizada; procurando..."); return false end
+    local desiredAction = desiredRunning and "correr" or "parar"
+    local action = Treadmill.action(prompt)
+    if action ~= desiredAction then
+        if action then Treadmill.wasRunning = desiredRunning end
+        return action ~= nil
+    end
+    Treadmill.switching = true
+    state.busy = true
+    local token = Treadmill.token
+    local initialCharacter = player.Character
+    local connection, began = nil, false
+    local ok, result = xpcall(function()
+        Treadmill.setStatus(desiredRunning and "Indo iniciar corrida..." or "Parando a corrida para coletar...")
+        local position = promptPosition(prompt)
+        if not position or not getRoot() then return false end
+        local maxDist = math.max(1, prompt.MaxActivationDistance)
+        local offset = math.min(1.4, maxDist * 0.22)
+        if not teleport(CFrame.new(position + Vector3.new(0, offset, offset))) then return false end
+        task.wait(0.2)
+        if not Treadmill.enabled or token ~= Treadmill.token
+            or player.Character ~= initialCharacter or not prompt.Parent then return false end
+        local _, root = getRoot()
+        position = promptPosition(prompt)
+        if not root or not position or not prompt.Enabled
+            or (root.Position - position).Magnitude > maxDist then return false end
+        local triggered = false
+        connection = prompt.Triggered:Connect(function(who)
+            if who == player then triggered = true end
+        end)
+        Treadmill.holdingPrompt = prompt
+        state.activePrompt = prompt
+        prompt:InputHoldBegin()
+        began = true
+        local deadline = os.clock() + math.max(0, prompt.HoldDuration) + 0.18
+        while os.clock() < deadline and Treadmill.enabled and token == Treadmill.token do
+            if triggered or Treadmill.action(prompt) ~= desiredAction then break end
+            task.wait(0.045)
+        end
+        prompt:InputHoldEnd()
+        began = false
+        Treadmill.holdingPrompt = nil
+        state.activePrompt = nil
+        local verificationEnd = os.clock() + CONFIG.Treadmill.ActionTimeout
+        local nextAlternateScan = 0
+        repeat
+            if not state.running or not Treadmill.enabled or token ~= Treadmill.token
+                or player.Character ~= initialCharacter then return false end
+            local current = Treadmill.action(prompt)
+            if not current and os.clock() >= nextAlternateScan then
+                nextAlternateScan = os.clock() + 0.7
+                Treadmill.prompt = nil
+                prompt = Treadmill.locate(true) or prompt
+                current = Treadmill.action(prompt)
+            end
+            if current and current ~= desiredAction then
+                Treadmill.wasRunning = desiredRunning
+                return true
+            end
+            task.wait(0.09)
+        until os.clock() >= verificationEnd
+        return false
+    end, debug.traceback)
+    if began then pcall(function() prompt:InputHoldEnd() end) end
+    if connection then connection:Disconnect() end
+    if state.activePrompt == Treadmill.holdingPrompt then state.activePrompt = nil end
+    Treadmill.holdingPrompt = nil
+    state.busy = false
+    Treadmill.switching = false
+    if not ok then warn("[LEO HUB / ESTEIRA] " .. tostring(result)) end
+    if not ok or not result then
+        Treadmill.setStatus("Interação sem confirmação; tentando novamente...")
+        Treadmill.nextRetry = os.clock() + CONFIG.Treadmill.RetryingSeconds
+        return false
+    end
+    return true
+end
+function Treadmill.start()
+    if Treadmill.enabled then return end
+    Treadmill.enabled = true
+    Treadmill.token = Treadmill.token + 1
+    Treadmill.wasRunning = false
+    Treadmill.nextRetry = 0
+    Treadmill.nextScan = 0
+    Treadmill.setStatus("Procurando a esteira...")
+    local token = Treadmill.token
+    task.spawn(function()
+        while state.running and Treadmill.enabled and token == Treadmill.token do
+            local ok, failure = pcall(function()
+                if not Treadmill.switching then
+                    local prompt = Treadmill.locate(false)
+                    local action = Treadmill.action(prompt)
+                    if not prompt or not action then
+                        Treadmill.setStatus("Esteira não encontrada; buscando no mapa...")
+                    elseif Treadmill.needPets() then
+                        if action == "parar" then
+                            Treadmill.wasRunning = true
+                            if not state.busy and os.clock() >= Treadmill.nextRetry then
+                                Treadmill.switch(false)
+                            end
+                        elseif not state.busy then
+                            Treadmill.wasRunning = false
+                            Treadmill.setStatus("Corrida pausada; coletando pets...")
+                        end
+                    elseif state.busy or Auto.active or Auto.working then
+                        Treadmill.setStatus("Aguardando coleta finalizar...")
+                    elseif action == "correr" then
+                        Treadmill.wasRunning = false
+                        if Auto.enabled and os.clock() >= Treadmill.nextReview then
+                            Treadmill.nextReview = os.clock() + 5
+                            for index, object in ipairs(state.runtime and state.runtime:GetChildren() or {}) do
+                                if not Treadmill.enabled or not Auto.enabled or token ~= Treadmill.token
+                                    or Treadmill.needPets() then break end
+                                if Auto.matches(object) and not Auto.attempted[object]
+                                    and not Auto.pending[object] then Auto.consider(object) end
+                                if index % 6 == 0 then task.wait() end
+                            end
+                        end
+                        if not Treadmill.needPets() and os.clock() >= Treadmill.nextRetry then
+                            Treadmill.switch(true)
+                        end
+                    else
+                        Treadmill.wasRunning = true
+                        Treadmill.setStatus(Auto.enabled
+                            and "Correndo; monitorando pets selecionados..."
+                            or "Correndo; ative a coleta de pets para sincronizar.")
+                    end
+                end
+            end)
+            if not ok then
+                warn("[LEO HUB / ESTEIRA] " .. tostring(failure))
+                Treadmill.setStatus("Erro temporário na esteira")
+                Treadmill.nextRetry = os.clock() + CONFIG.Treadmill.RetryingSeconds
+            end
+            task.wait(CONFIG.Treadmill.CycleSeconds)
+        end
+    end)
+end
+function Treadmill.stop()
+    if not Treadmill.enabled then return end
+    Treadmill.enabled = false
+    Treadmill.token = Treadmill.token + 1
+    if Treadmill.holdingPrompt then
+        pcall(function() Treadmill.holdingPrompt:InputHoldEnd() end)
+    end
+    Treadmill.setStatus("Desativado. A corrida atual não será alterada.")
+end
+
+end -- fim do controle da esteira
+
 local function addCard(object)
-    local frame = surface(scroll, "Pet", UDim2.new(), UDim2.new(1, -6, 0, 140), THEME.Input)
-    local portrait = surface(frame, "Portrait", UDim2.fromOffset(12, 12), UDim2.fromOffset(72, 72), THEME.Background)
+    local frame = surface(scroll, "Pet", UDim2.new(), UDim2.new(1, -5, 0, 137), THEME.Surface)
+    frame.ClipsDescendants = true
+    -- Reflexo angular discreto: o conteúdo continua completamente clicável.
+    do
+        local shine = create("Frame", {
+            Position = UDim2.new(1, -111, 0, -32), Size = UDim2.fromOffset(85, 198),
+            Rotation = 35, BackgroundColor3 = THEME.Highlight,
+            BackgroundTransparency = 0.97, BorderSizePixel = 0, Active = false,
+        }, frame)
+        shine:SetAttribute("LeoAccentDecoration", true)
+        local second = create("Frame", {
+            Position = UDim2.new(1, -65, 0, -32), Size = UDim2.fromOffset(32, 198),
+            Rotation = 35, BackgroundColor3 = THEME.Highlight,
+            BackgroundTransparency = 0.98, BorderSizePixel = 0, Active = false,
+        }, frame)
+        second:SetAttribute("LeoAccentDecoration", true)
+    end
+    local portrait = surface(frame, "Portrait", UDim2.fromOffset(12, 10), UDim2.fromOffset(96, 113), THEME.Background)
     portrait.ClipsDescendants = true
     state.cardSequence = state.cardSequence + 1
     local card = {
         sequence = state.cardSequence,
         frame = frame, preview = portrait, previewReady = false, previewVersion = 0,
         imageKey = "", image = nil,
-        name = label(frame, cleanName(object.Name), 14, UDim2.fromOffset(98, 10), UDim2.new(1, -146, 0, 23)),
-        rarity = label(frame, "Raridade: verificando", 11, UDim2.fromOffset(98, 35), UDim2.new(1, -112, 0, 18), THEME.Accent),
-        size = label(frame, "Tamanho: verificando", 11, UDim2.fromOffset(98, 56), UDim2.new(1, -112, 0, 18), THEME.Muted),
-        distance = label(frame, "", 10, UDim2.fromOffset(98, 77), UDim2.new(1, -112, 0, 17), THEME.Muted),
-        action = label(frame, "Pronto", 9, UDim2.fromOffset(12, 115), UDim2.fromOffset(172, 16), THEME.Muted),
-        position = label(frame, "", 10, UDim2.new(1, -44, 0, 12), UDim2.fromOffset(30, 19), THEME.Muted),
-        imageKind = label(frame, "PRÉVIA", 7, UDim2.fromOffset(8, 87), UDim2.fromOffset(80, 16), THEME.Muted),
+        name = label(frame, cleanName(object.Name), 15, UDim2.fromOffset(124, 11), UDim2.new(1, -177, 0, 24)),
+        rarity = label(frame, "Raridade: verificando", 11, UDim2.fromOffset(124, 41), UDim2.fromOffset(157, 22), THEME.Text),
+        size = label(frame, "Tamanho: verificando", 11, UDim2.fromOffset(289, 41), UDim2.fromOffset(155, 22), THEME.Text),
+        distance = label(frame, "", 10, UDim2.fromOffset(124, 68), UDim2.new(1, -147, 0, 18), THEME.Muted),
+        action = label(frame, "●  Pronto", 10, UDim2.fromOffset(124, 103), UDim2.fromOffset(112, 20), THEME.Success),
+        position = label(frame, "", 10, UDim2.new(1, -41, 0, 10), UDim2.fromOffset(34, 21), THEME.Muted),
+        imageKind = { Text = "" },
     }
-    card.name.Font = Enum.Font.FredokaOne
-    card.imageKind.TextXAlignment = Enum.TextXAlignment.Center
-    card.position.TextXAlignment = Enum.TextXAlignment.Right
-    local tp = button(frame, "📍 Ir até pet", UDim2.new(1, -214, 1, -38), UDim2.fromOffset(96, 28))
-    tp.BackgroundColor3 = THEME.Surface
-    local take = button(frame, "🐾 Pegar", UDim2.new(1, -108, 1, -38), UDim2.fromOffset(96, 28), true)
+    card.name.Font = Enum.Font.GothamBold
+    card.position.TextXAlignment = Enum.TextXAlignment.Center
+    do
+        local successChip = create("Frame", {
+            Name = "StatusChip", Position = UDim2.fromOffset(121, 101),
+            Size = UDim2.fromOffset(106, 24),
+            BackgroundColor3 = THEME.Success, BackgroundTransparency = 0.83,
+            BorderSizePixel = 0,
+        }, frame)
+        round(successChip, 8)
+        card.action.ZIndex = 2
+        card.actionChip = successChip
+    end
+    -- Raridade e tamanho sao textos simples, sem fundos ou contornos coloridos.
+    local tp = button(frame, "📍 Ir até pet", UDim2.new(1, -244, 1, -47), UDim2.fromOffset(113, 33))
+    local take = button(frame, "🐾 Pegar", UDim2.new(1, -120, 1, -47), UDim2.fromOffset(109, 33), true)
+    tp.TextSize = 12
+    take.TextSize = 12
     tp.Activated:Connect(function()
         if state.busy then notify("Aguarde a interação atual terminar.", THEME.Warning) return end
         if not requireBase() then return end
@@ -2524,6 +2977,8 @@ function Engine.beginRound(cancelActive)
     if cancelActive then
         Auto.cancel("Rodada reiniciada • aguardando pets")
         Auto.attempted = setmetatable({}, { __mode = "k" })
+        Auto.attempts = setmetatable({}, { __mode = "k" })
+        state.treadmill.unconfirmed = 0
     end
     Engine.scheduleSnapshot()
 end
@@ -2687,6 +3142,7 @@ function Engine.start()
     Auto.updateUI()
 end
 function Engine.cleanup()
+    state.treadmill.stop()
     Engine.settleVersion = Engine.settleVersion + 1
     Engine.refreshVersion = Engine.refreshVersion + 1
     Engine.snapshotScheduled = false
@@ -2709,13 +3165,13 @@ end
 
 local function styleToggle(item, enabled, onText, offText)
     item.Text = enabled and onText or offText
-    item.BackgroundColor3 = enabled and THEME.Accent or THEME.Input
-    item.TextColor3 = Color3.new(1, 1, 1)
+    item.BackgroundColor3 = enabled and THEME.ButtonAccent or THEME.Input
+    item.TextColor3 = enabled and THEME.OnAccent or THEME.Text
     item:SetAttribute("ButtonAccent", enabled and true or false)
     for _, child in ipairs(item:GetChildren()) do
         if child:IsA("UIStroke") and child:GetAttribute("ButtonStroke") then
             child.Color = enabled and THEME.Highlight or THEME.Border
-            child.Transparency = enabled and 0.50 or 0.58
+            child.Transparency = enabled and 0.23 or 0.35
         end
     end
 end
@@ -2729,17 +3185,55 @@ local function applyThemeToTree(root)
             elseif surfaceRole == "background" then object.BackgroundColor3 = THEME.Background
             elseif surfaceRole == "surface" then object.BackgroundColor3 = THEME.Surface end
         elseif object:IsA("TextLabel") then
-            object.TextColor3 = Color3.new(1, 1, 1)
+            local role = object:GetAttribute("TextRole")
+            local statIcon = object:GetAttribute("LeoStatIcon")
+            if statIcon == 2 then object.TextColor3 = THEME.Success
+            elseif statIcon == 3 then object.TextColor3 = THEME.Highlight
+            elseif role == "muted" then object.TextColor3 = THEME.Muted
+            elseif role == "accent" then object.TextColor3 = THEME.Accent
+            elseif role == "success" then object.TextColor3 = THEME.Success
+            elseif role == "warning" then object.TextColor3 = THEME.Warning
+            elseif role == "highlight" then object.TextColor3 = THEME.Highlight
+            else object.TextColor3 = THEME.Text end
         elseif object:IsA("TextBox") then
             if object.BackgroundTransparency < 1 then object.BackgroundColor3 = THEME.Input end
-            object.TextColor3 = Color3.new(1, 1, 1)
-            object.PlaceholderColor3 = Color3.new(1, 1, 1)
+            object.TextColor3 = THEME.Text
+            object.PlaceholderColor3 = THEME.Muted
         elseif object:IsA("TextButton") and object:GetAttribute("StyledButton") then
             local accent = object:GetAttribute("ButtonAccent") == true
-            object.BackgroundColor3 = accent and THEME.Accent or THEME.Input
-            object.TextColor3 = Color3.new(1, 1, 1)
+            object.BackgroundColor3 = accent and THEME.ButtonAccent or THEME.Input
+            object.TextColor3 = accent and THEME.OnAccent or THEME.Text
         elseif object:IsA("ScrollingFrame") then
             object.ScrollBarImageColor3 = THEME.Accent
+        elseif object:IsA("UIGradient") then
+            if object:GetAttribute("LeoAccentBorderGradient") then
+                object.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, THEME.Highlight),
+                    ColorSequenceKeypoint.new(0.5, THEME.Accent),
+                    ColorSequenceKeypoint.new(1, THEME.Highlight),
+                })
+            elseif object:GetAttribute("LeoMainGradient") then
+                object.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+                    ColorSequenceKeypoint.new(0.45, Color3.fromRGB(229, 229, 229)),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(194, 194, 194)),
+                })
+            elseif object:GetAttribute("LeoSurfaceGradient") then
+                object.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+                    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(242, 242, 242)),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(207, 207, 207)),
+                })
+            elseif object:GetAttribute("LeoButtonGradient") then
+                object.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+                    ColorSequenceKeypoint.new(0.47, Color3.fromRGB(244, 244, 244)),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(215, 215, 215)),
+                })
+            elseif object:GetAttribute("LeoInputGradient") then
+                object.Color = ColorSequence.new(
+                    Color3.fromRGB(255, 255, 255), Color3.fromRGB(214, 214, 214))
+            end
         elseif object:IsA("UIStroke") then
             if object:GetAttribute("StyledOutline") then
                 object.Color = THEME.Border
@@ -2748,15 +3242,28 @@ local function applyThemeToTree(root)
                 local accent = parent and parent:GetAttribute("ButtonAccent") == true
                 object.Color = accent and THEME.Highlight or THEME.Border
             elseif object:GetAttribute("MainAccentBorder") then
-                object.Color = THEME.Accent
+                object.Color = THEME.Highlight
             end
+        end
+        if object:GetAttribute("LeoAccentDecoration")
+            and (object:IsA("Frame") or object:IsA("ImageLabel")) then
+            object.BackgroundColor3 = THEME.Highlight
+        elseif object:GetAttribute("ThemeAura") and object:IsA("Frame") then
+            object.BackgroundColor3 = THEME.Accent
+        elseif object:GetAttribute("ThemeBorder") and object:IsA("Frame") then
+            object.BackgroundColor3 = THEME.Border
         end
     end
     main.BackgroundColor3 = THEME.Background
-    main.BackgroundTransparency = 0.07
-    footer.TextColor3 = Color3.new(1, 1, 1)
-    autoToggle.BackgroundColor3 = Auto.enabled and THEME.Warning or THEME.Accent
-    autoToggle.TextColor3 = Color3.new(1, 1, 1)
+    main.BackgroundTransparency = 0
+    footer.TextColor3 = THEME.Muted
+    autoToggle.BackgroundColor3 = Auto.enabled and THEME.ButtonWarning or THEME.ButtonAccent
+    autoToggle.TextColor3 = Auto.enabled and THEME.DarkText or THEME.OnAccent
+    if state.treadmillToggle and state.treadmillToggle.Parent then
+        state.treadmillToggle.BackgroundColor3 = state.treadmill.enabled
+            and THEME.ButtonWarning or THEME.ButtonAccent
+        state.treadmillToggle.TextColor3 = state.treadmill.enabled and THEME.DarkText or THEME.OnAccent
+    end
     for _, line in ipairs(settingsBox:GetChildren()) do
         if line:IsA("Frame") and line.Size.Y.Offset <= 2 then
             line.BackgroundColor3 = THEME.Border
@@ -2765,18 +3272,26 @@ local function applyThemeToTree(root)
     for _, card in pairs(state.cards) do
         if card and card.frame and card.frame.Parent then
             card.frame.BackgroundColor3 = THEME.Surface
-            if card.preview then card.preview.BackgroundColor3 = THEME.Rail end
+            if card.preview then card.preview.BackgroundColor3 = THEME.Background end
         end
     end
 end
 
 local function applyTheme(name)
-    local preset = THEME_PRESETS[name] or THEME_PRESETS.roxo
-    Settings.theme = name
-    THEME.Accent = preset.Accent
-    THEME.Highlight = preset.Highlight
-    THEME.Warning = preset.Warning
+    local preset = THEME_PRESETS[name] or THEME_PRESETS.azul
+    Settings.theme = THEME_PRESETS[name] and name or "azul"
+    for property, color in pairs(preset) do
+        THEME[property] = color
+    end
+    THEME.ButtonAccent = THEME.Accent:Lerp(THEME.Background, 0.18)
+    THEME.ButtonWarning = THEME.Warning:Lerp(THEME.Background, 0.20)
     applyThemeToTree(gui)
+    if state.floatingBubble and state.floatingBubble.Parent then
+        state.floatingBubble.BackgroundColor3 = THEME.Rail
+    end
+    if state.floatingStroke and state.floatingStroke.Parent then
+        state.floatingStroke.Color = THEME.Highlight
+    end
     if state.page then
         local activePage = state.page
         state.page = nil
@@ -3078,24 +3593,25 @@ function showPage(name)
     local entering = pages[name]
     if previous and previous ~= entering and previous.Visible then
         tween(previous, QUICK, { GroupTransparency = 1,
-            Position = UDim2.fromOffset(82, 12) })
+            Position = UDim2.fromOffset(94, 12) })
         task.delay(0.17, function()
             if state.running and pageVersion == thisVersion then previous.Visible = false end
         end)
     end
     entering.Visible = true
-    entering.Position = UDim2.fromOffset(105, 12)
+    entering.Position = UDim2.fromOffset(117, 12)
     entering.GroupTransparency = 1
     tween(entering, PAGE_TWEEN, {
-        Position = UDim2.fromOffset(92, 12), GroupTransparency = 0,
+        Position = UDim2.fromOffset(104, 12), GroupTransparency = 0,
     })
-    for pageName, item in pairs({ home = homeNav, settings = settingsNav, about = aboutNav }) do
+    for pageName, item in pairs({ home = homeNav, settings = settingsNav,
+        auto = state.treadmillNav, about = aboutNav }) do
         local selected = pageName == name
         item:SetAttribute("ButtonAccent", selected and true or false)
-        tween(item, QUICK, { BackgroundColor3 = selected and THEME.Accent or THEME.Input })
+        tween(item, QUICK, { BackgroundColor3 = selected and THEME.ButtonAccent or THEME.Input })
         for _, child in ipairs(item:GetDescendants()) do
             if child:IsA("TextLabel") then
-                tween(child, QUICK, { TextColor3 = Color3.new(1, 1, 1) })
+                tween(child, QUICK, { TextColor3 = selected and THEME.OnAccent or THEME.Text })
             elseif child:IsA("Frame") and not child:GetAttribute("LeoIconPiece") then
                 tween(child, QUICK, { BackgroundColor3 = selected and THEME.Background or THEME.Text })
             elseif child:IsA("UIStroke") and child:GetAttribute("ButtonStroke") then
@@ -3114,6 +3630,10 @@ function showPage(name)
 end
 connect(homeNav.Activated, function() showPage("home") end)
 connect(settingsNav.Activated, function() showPage("settings") end)
+connect(state.treadmillNav.Activated, function() showPage("auto") end)
+connect(state.treadmillToggle.Activated, function()
+    if state.treadmill.enabled then state.treadmill.stop() else state.treadmill.start() end
+end)
 connect(aboutNav.Activated, function() showPage("about"); if state.loadAboutAvatar then state.loadAboutAvatar(false) end end)
 
 connect(petSelect.Activated, function()
@@ -3165,6 +3685,7 @@ end)
 styleToggle(antiAfkToggle, Settings.antiAfk, "Ativado", "Desativado")
 applyTheme(Settings.theme)
 AntiAFK.start()
+state.treadmill.setStatus("Desativado")
 showPage("home")
 
 local searchVersion = 0
@@ -3213,12 +3734,12 @@ do
         if compact then
             CONFIG.Width, CONFIG.Height = 540, 540
             mobileSwitch.Visible = true
-            left.Size = UDim2.new(1, 0, 1, 0)
+            left.Size = UDim2.new(1, 0, 1, -35)
             right.Position = UDim2.fromOffset(0, 36)
             right.Size = UDim2.new(1, 0, 1, -36)
-            filters.Size = UDim2.new(1, 0, 0, 238)
-            basePanel.Position = UDim2.fromOffset(0, 308)
-            basePanel.Size = UDim2.new(1, 0, 0, 100)
+            filters.Size = UDim2.new(1, -14, 0, 212)
+            basePanel.Position = UDim2.fromOffset(7, 290)
+            basePanel.Size = UDim2.new(1, -14, 0, 104)
 
             aboutPortrait.Position = UDim2.fromOffset(12, 12)
             aboutPortrait.Size = UDim2.new(1, -24, 0, 162)
@@ -3254,12 +3775,12 @@ do
         else
             CONFIG.Width, CONFIG.Height = desktopW, desktopH
             mobileSwitch.Visible = false
-            left.Size = UDim2.new(0, 236, 1, 0)
-            right.Position = UDim2.fromOffset(252, 0)
-            right.Size = UDim2.new(1, -252, 1, 0)
-            filters.Size = UDim2.new(1, 0, 0, 254)
-            basePanel.Position = UDim2.fromOffset(0, 326)
-            basePanel.Size = UDim2.new(1, 0, 0, 108)
+            left.Size = UDim2.new(0, 232, 1, -1)
+            right.Position = UDim2.fromOffset(244, 0)
+            right.Size = UDim2.new(1, -244, 1, 0)
+            filters.Size = UDim2.new(1, -14, 0, 212)
+            basePanel.Position = UDim2.fromOffset(7, 305)
+            basePanel.Size = UDim2.new(1, -14, 0, 120)
             aboutPortrait.Position = UDim2.fromOffset(12, 12)
             aboutPortrait.Size = UDim2.new(0, 282, 1, -24)
             portraitFooter.Position = UDim2.new(0, 0, 1, -80)
@@ -3331,7 +3852,7 @@ do
     connect(Workspace:GetPropertyChangedSignal("CurrentCamera"), state.watchHubCamera)
     state.watchHubCamera()
 
-    local ok, err = pcall(function()
+    state.floatingOkay, state.floatingError = pcall(function()
 
         local bubbleGui = create("ScreenGui", {
             Name = "LeoHubFloating", ResetOnSpawn = false,
@@ -3347,15 +3868,17 @@ do
             BackgroundTransparency = 0.06,
             BorderSizePixel = 0, AutoButtonColor = false,
             Text = "LH", TextSize = 20,
-            Font = Enum.Font.FredokaOne,
+            Font = Enum.Font.GothamBold,
             TextColor3 = Color3.new(1, 1, 1),
             Visible = false, Active = true, ZIndex = 10,
         }, bubbleGui)
         round(bubble, 17)
         local bubbleStroke = create("UIStroke", {
-            Color = FLOATING_LOGO_BLUE_BORDER, Thickness = 2.2,
+            Color = THEME.Highlight, Thickness = 2.2,
             Transparency = 0.06, ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
         }, bubble)
+        state.floatingBubble = bubble
+        state.floatingStroke = bubbleStroke
         local bubbleScale = create("UIScale", { Scale = 1 }, bubble)
 
         local picture = create("ImageLabel", {
@@ -3395,7 +3918,7 @@ do
                 pcall(function() loaded = picture.IsLoaded end)
             end
             bubble.Text = loaded and "" or "LH"
-            bubbleStroke.Color = FLOATING_LOGO_BLUE_BORDER
+            bubbleStroke.Color = THEME.Highlight
         end
         local function restore()
             if not state.running or not state.minimized then return end
@@ -3426,7 +3949,7 @@ do
             fitScreen()
             refreshLogo()
             bubble.Position = clampPosition(main.Position)
-            bubbleStroke.Color = FLOATING_LOGO_BLUE_BORDER
+            bubbleStroke.Color = THEME.Highlight
             logoScale = math.clamp(viewportScale, 0.86, 1)
             bubbleScale.Scale = logoScale
             bubble.Visible = true 
@@ -3495,8 +4018,8 @@ do
 
         state.floatingRoot = bubble
     end)
-    if not ok then
-        warn("[LEO HUB] Ícone flutuante indisponível: " .. tostring(err))
+    if not state.floatingOkay then
+        warn("[LEO HUB] Ícone flutuante indisponível: " .. tostring(state.floatingError))
 
         if state.floatingGui and state.floatingGui.Parent then
             state.floatingGui:Destroy()
