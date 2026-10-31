@@ -661,7 +661,7 @@ local main = markSurface(create("Frame", {
     Name = "Panel", AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(CONFIG.Width, CONFIG.Height),
     BackgroundColor3 = THEME.Background, BackgroundTransparency = 0, BorderSizePixel = 0,
-    ClipsDescendants = true, Active = true,
+    ClipsDescendants = true, Active = true, Visible = false,
 }, gui), "background")
 round(main, 19)
 -- Iluminação neutra preserva a tonalidade real dos quatro temas.
@@ -1208,6 +1208,12 @@ local discordTitle = label(contact, "DISCORD", 11,
 local discordNick = label(contact, "o.priorizado", 16,
     UDim2.fromOffset(20, 32), UDim2.new(1, -40, 0, 30))
 
+-- Atalhos permanentes para apoio e Discord na aba Sobre.
+state.supportButton = button(creatorInfo, "APOIAR O PROJETO",
+    UDim2.fromOffset(20, 183), UDim2.new(1, -40, 0, 39), true)
+state.discordCopyButton = button(creatorInfo, "COPIAR DISCORD",
+    UDim2.fromOffset(20, 232), UDim2.new(1, -40, 0, 36))
+
 local avatarRefresh = button(creatorInfo, "Atualizar avatar", UDim2.new(1, -161, 0, 17),
     UDim2.fromOffset(143, 34))
 
@@ -1218,6 +1224,18 @@ local function notify(message, color)
     if not state.running then return end
     footer.Text = message
     footer.TextColor3 = color or THEME.Muted
+end
+
+-- Copia somente com acoes locais; nao faz requisicoes nem solicita Robux.
+state.copySupportText = function(value, what)
+    if type(setclipboard) ~= "function" then
+        notify("Copia indisponivel neste executor. Use o contato exibido.", THEME.Warning)
+        return false
+    end
+    local ok = pcall(setclipboard, value)
+    notify(ok and (what .. " copiado!") or "Nao foi possivel copiar.",
+        ok and THEME.Success or THEME.Warning)
+    return ok
 end
 
 local renderSelectionThumbnail = function(holder, option)
@@ -3183,6 +3201,7 @@ local function applyThemeToTree(root)
             if object:GetAttribute("AboutAccentSurface") then object.BackgroundColor3 = THEME.Accent
             elseif surfaceRole == "rail" then object.BackgroundColor3 = THEME.Rail
             elseif surfaceRole == "background" then object.BackgroundColor3 = THEME.Background
+            elseif surfaceRole == "accent" then object.BackgroundColor3 = THEME.Accent
             elseif surfaceRole == "surface" then object.BackgroundColor3 = THEME.Surface end
         elseif object:IsA("TextLabel") then
             local role = object:GetAttribute("TextRole")
@@ -3635,6 +3654,12 @@ connect(state.treadmillToggle.Activated, function()
     if state.treadmill.enabled then state.treadmill.stop() else state.treadmill.start() end
 end)
 connect(aboutNav.Activated, function() showPage("about"); if state.loadAboutAvatar then state.loadAboutAvatar(false) end end)
+connect(state.supportButton.Activated, function()
+    if state.showSupportPopup then state.showSupportPopup() end
+end)
+connect(state.discordCopyButton.Activated, function()
+    state.copySupportText(discordNick.Text, "Discord")
+end)
 
 connect(petSelect.Activated, function()
     local options = {}
@@ -3770,6 +3795,10 @@ do
             contact.Size = UDim2.new(1, -28, 0, 59)
             discordTitle.Position = UDim2.fromOffset(14, 6)
             discordNick.Position = UDim2.fromOffset(14, 25)
+            state.supportButton.Position = UDim2.fromOffset(14, 138)
+            state.supportButton.Size = UDim2.new(1, -28, 0, 38)
+            state.discordCopyButton.Position = UDim2.fromOffset(14, 187)
+            state.discordCopyButton.Size = UDim2.new(1, -28, 0, 34)
 
             showMobileHome(homePanel)
         else
@@ -3810,6 +3839,10 @@ do
             contact.Size = UDim2.new(1, -40, 0, 73)
             discordTitle.Position = UDim2.fromOffset(20, 12)
             discordNick.Position = UDim2.fromOffset(20, 32)
+            state.supportButton.Position = UDim2.fromOffset(20, 183)
+            state.supportButton.Size = UDim2.new(1, -40, 0, 39)
+            state.discordCopyButton.Position = UDim2.fromOffset(20, 232)
+            state.discordCopyButton.Size = UDim2.new(1, -40, 0, 36)
             showMobileHome(homePanel)
         end
         main.Size = UDim2.fromOffset(CONFIG.Width, CONFIG.Height)
@@ -4056,10 +4089,151 @@ connect(UIS.InputEnded, function(input)
     if input == dragInput then dragInput = nil end
 end)
 
+-- Janela inicial integrada ao LEO HUB: doacao opcional + contato Discord.
+-- Nenhum link externo ou auto-loader e utilizado neste componente.
+do
+    state.showSupportPopup = function()
+        if not state.running or not gui.Parent then return end
+        if state.supportOverlay and state.supportOverlay.Parent then return end
+
+        local overlay = create("Frame", {
+            Name = "LeoHubSupportOverlay", Size = UDim2.fromScale(1, 1),
+            BackgroundColor3 = Color3.new(0, 0, 0),
+            BackgroundTransparency = 1, BorderSizePixel = 0,
+            Active = true, ZIndex = 150,
+        }, gui)
+        state.supportOverlay = overlay
+
+        local panel = markSurface(create("Frame", {
+            Name = "SupportPanel", AnchorPoint = Vector2.new(0.5, 0.5),
+            Position = UDim2.fromScale(0.5, 0.5),
+            Size = UDim2.fromOffset(380, 425),
+            BackgroundColor3 = THEME.Background, BorderSizePixel = 0,
+            ZIndex = 151,
+        }, overlay), "background")
+        round(panel, 17)
+        local panelStroke = create("UIStroke", {
+            Color = THEME.Highlight, Thickness = 1.7,
+            Transparency = 0.13, ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+        }, panel)
+        panelStroke:SetAttribute("MainAccentBorder", true)
+        local scale = create("UIScale", { Scale = 0.80 }, panel)
+
+        local title = label(panel, "LEO HUB", 24, UDim2.fromOffset(22, 18),
+            UDim2.new(1, -44, 0, 32), THEME.Accent)
+        title.Font = Enum.Font.GothamBlack
+        local subtitle = label(panel, "COMUNIDADE  /  SUPORTE AO PROJETO", 10,
+            UDim2.fromOffset(23, 55), UDim2.new(1, -46, 0, 17), THEME.Muted)
+        subtitle.Font = Enum.Font.GothamBold
+        markSurface(create("Frame", {
+            Position = UDim2.fromOffset(23, 84),
+            Size = UDim2.new(1, -46, 0, 2),
+            BackgroundColor3 = THEME.Accent, BorderSizePixel = 0,
+        }, panel), "accent")
+        local description = label(panel,
+            "Gostou do LEO HUB? Se quiser apoiar as proximas atualizacoes, " ..
+            "voce pode contribuir. A doacao e totalmente opcional!",
+            13, UDim2.fromOffset(23, 101), UDim2.new(1, -46, 0, 64), THEME.Text)
+        description.TextWrapped = true
+        description.TextTruncate = Enum.TextTruncate.None
+        description.TextYAlignment = Enum.TextYAlignment.Top
+
+        local donationCard = markSurface(create("Frame", {
+            Position = UDim2.fromOffset(23, 174),
+            Size = UDim2.new(1, -46, 0, 68),
+            BackgroundColor3 = THEME.Rail, BorderSizePixel = 0,
+            ZIndex = 152,
+        }, panel), "rail")
+        round(donationCard, 10)
+        outline(donationCard)
+        label(donationCard, "DOACOES  /  ROBLOX", 10,
+            UDim2.fromOffset(13, 8), UDim2.new(1, -122, 0, 17), THEME.Muted)
+        label(donationCard, "@" .. CREATOR_USERNAME, 16,
+            UDim2.fromOffset(13, 29), UDim2.new(1, -117, 0, 26), THEME.Text)
+        local copyDonation = button(donationCard, "COPIAR",
+            UDim2.new(1, -103, 0.5, -16), UDim2.fromOffset(91, 32), true)
+        copyDonation.TextSize = 11
+
+        local discordCard = markSurface(create("Frame", {
+            Position = UDim2.fromOffset(23, 252),
+            Size = UDim2.new(1, -46, 0, 68),
+            BackgroundColor3 = THEME.Rail, BorderSizePixel = 0,
+            ZIndex = 152,
+        }, panel), "rail")
+        round(discordCard, 10)
+        outline(discordCard)
+        label(discordCard, "CONTATO  /  DISCORD", 10,
+            UDim2.fromOffset(13, 8), UDim2.new(1, -122, 0, 17), THEME.Muted)
+        label(discordCard, discordNick.Text, 16,
+            UDim2.fromOffset(13, 29), UDim2.new(1, -117, 0, 26), THEME.Text)
+        local copyDiscord = button(discordCard, "COPIAR",
+            UDim2.new(1, -103, 0.5, -16), UDim2.fromOffset(91, 32))
+        copyDiscord.TextSize = 11
+
+        local continueButton = button(panel, "CONTINUAR PARA O LEO HUB",
+            UDim2.fromOffset(23, 333), UDim2.new(1, -46, 0, 44), true)
+        continueButton.TextSize = 13
+        local status = label(panel, "Obrigado por fazer parte da comunidade!", 10,
+            UDim2.fromOffset(23, 388), UDim2.new(1, -46, 0, 19), THEME.Muted)
+        status.TextXAlignment = Enum.TextXAlignment.Center
+
+        local function idealScale()
+            local size = overlay.AbsoluteSize
+            if size.X <= 0 or size.Y <= 0 then return 0.85 end
+            return math.clamp(math.min(1, (size.X - 24) / 380,
+                (size.Y - 24) / 425), 0.35, 1)
+        end
+        local closing = false
+        local function copyContact(value, contactName)
+            if closing then return end
+            local ok = state.copySupportText(value, contactName)
+            status.Text = ok and (contactName .. " copiado!")
+                or "Copia indisponivel. Veja o contato acima."
+            status.TextColor3 = ok and THEME.Success or THEME.Warning
+        end
+        copyDonation.Activated:Connect(function()
+            copyContact(CREATOR_USERNAME, "Nick Roblox")
+        end)
+        copyDiscord.Activated:Connect(function()
+            copyContact(discordNick.Text, "Discord")
+        end)
+        continueButton.Activated:Connect(function()
+            if closing then return end
+            closing = true
+            continueButton.Active = false
+            tween(scale, TweenInfo.new(0.24, Enum.EasingStyle.Back,
+                Enum.EasingDirection.In), { Scale = idealScale() * 0.82 })
+            tween(overlay, TweenInfo.new(0.25), { BackgroundTransparency = 1 })
+            task.delay(0.26, function()
+                if overlay.Parent then overlay:Destroy() end
+                if state.supportOverlay == overlay then state.supportOverlay = nil end
+                -- A interface principal so aparece depois de clicar em CONTINUAR.
+                -- Ao reabrir o popup pela aba Sobre, nao altera a tela ja aberta.
+                if state.running and gui.Parent and not state.minimized then
+                    main.Visible = true
+                end
+            end)
+        end)
+        overlay:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+            if not closing and panel.Parent then scale.Scale = idealScale() end
+        end)
+        tween(overlay, TweenInfo.new(0.25), { BackgroundTransparency = 0.38 })
+        task.defer(function()
+            if overlay.Parent and not closing then
+                tween(scale, TweenInfo.new(0.40, Enum.EasingStyle.Back,
+                    Enum.EasingDirection.Out), { Scale = idealScale() })
+            end
+        end)
+    end
+end
+
 state.fitHubScreen()
 renderList()
 Engine.start()
 refreshBase()
+task.defer(function()
+    if state.running and state.showSupportPopup then state.showSupportPopup() end
+end)
 
 task.spawn(function()
     while state.running and gui.Parent do
